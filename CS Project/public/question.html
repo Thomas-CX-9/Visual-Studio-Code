@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Question</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="controlButton.css">
+    </head>
+    <style>
+        #extraQuit{
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            color: white;
+            background-color: red;
+            border: none;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            display: none;
+        }
+        #level{
+            text-align: center;
+            font-size: 40px;
+            margin-top: 100px;
+        }
+        #dialog{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 150px;
+            text-justify: center;
+            font-size: 30px;
+        }
+        #timer{
+            position: absolute;
+            top: 50px;
+            right: 60px;
+            font-size: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
+            text-decoration: bold;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 30px darkgray;
+        }
+        #question-card{
+            top: 400px;
+        }
+        #question{
+            text-align: center;
+        }
+        #choices-rack{
+            display: flex; 
+            gap: 20px;
+        }
+        #A {
+            flex: 1;
+        }
+        #B {
+            flex: 1;
+        }
+        #C {
+            flex: 1;
+        }
+        #D {
+            flex: 1;
+        }
+        .insideBorder{
+            position: relative;
+            border: 2px solid transparent;
+            border-radius: 10px;
+        }
+        .choices{
+            margin: 0px;
+            font-size: 40px;
+            padding: 15px;
+            border: 2px solid rgb(50, 50, 50);
+            cursor: pointer;
+            height: 100px;
+            justify-content: center;
+        }
+        #explaination{
+            margin-top: 20px;
+            font-size: 30px;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+    <body>
+        <button id="extraQuit">退出遊戲</button>
+        <h1 id="level"></h1>
+        <p id="dialog"></p>
+        <div id="control-rack">
+            <button class="control-button" id="quitOrRedo" onclick="clickingQuitOrRedo();">退出遊戲</button>
+            <button class="control-button" id="continue" onclick="clickingContinue();">繼續</button>
+        </div> 
+        <div id="timer">00:
+            <span id="countdown">30</span>
+        </div>
+        <div id='question-card'></div>
+        <script src="questioning.js"></script>
+        <script src="controller.js"></script> 
+        <script>
+            let wordsTyped = 0;
+            let level = 1;
+            let questionKey;
+            let questionCardHTML = '';
+            const dialog = document.getElementById('dialog');
+            const contentOfDialogOfLV1 = '新兵，先來點簡單的基礎題，證明你不是誤闖的！';
+            const contentOfDialogOfLV2 = '基礎知識通過！你獲得了進入神舟中心的許可權。接下來的任務是確保載人飛船與空間站的完美對接，考驗你對核心技術的理解！';
+            const contentOfDialogOfLV3 = '很好，你對載人航天體系已經掌握！現在我們進入嫦娥工程，目標是月球和深空。回答這些關於補給與探測的題目！';
+            const contentOfDialogOfLV4 = '離成功只有一步之遙！最終關卡是空間站和未來技術。回答這些關於重型發射和深空探測的難題，你就能成為正式的航天專家！';
+            const body = document.body;
+            const title = document.getElementById('level');
+            const continueButton = document.getElementById('continue');
+            const quitOrRedo = document.getElementById('quitOrRedo');
+            let contentOfDialog;
+            const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）', '🔥 第四級：天宮組裝（極難）'];
+            let questionNum = 0;
+            let lengthOfContentOfDialog;
+            let is_answered = true;
+            let plot_passed = false;
+            let is_typed;
+            let choice;
+            let is_timeOut;
+            function disableRedo(){
+                quitOrRedo.innerText = '重來一遍';
+                quitOrRedo.disabled = true;
+                quitOrRedo.style.setProperty('background-color', 'rgb(100,100,100)');
+            }
+            function enableRedo(){
+                quitOrRedo.innerText = '重來一遍';
+                quitOrRedo.disabled = false;
+                quitOrRedo.style.setProperty('background-color', 'red');
+            }
+            function disableQuit(){
+                quitOrRedo.innerText = '退出遊戲';
+                quitOrRedo.disabled = true;
+                quitOrRedo.style.setProperty('background-color', 'rgb(100,100,100)');
+            }
+            function enableQuit(){
+                quitOrRedo.innerText = '退出遊戲';
+                quitOrRedo.disabled = false;
+                quitOrRedo.style.setProperty('background-color', 'red');
+            }
+            function disableContinue(){
+                continueButton.innerText = '繼續';
+                continueButton.disabled = true;
+                continueButton.style.setProperty('background-color', 'rgb(100,100,100)');
+            }
+            function enableContinue(){
+                continueButton.innerText = '繼續';
+                continueButton.disabled = false;
+                continueButton.style.setProperty('background-color', 'purple');
+            }
+            function disableNextQuestion(){
+                continueButton.innerText = '下一題';
+                continueButton.disabled = true;
+                continueButton.style.setProperty('background-color', 'rgb(100,100,100)');
+            }
+            function enableNextQuestion(){
+                continueButton.innerText = '下一題';
+                continueButton.disabled = false;
+                continueButton.style.setProperty('background-color', 'purple');
+            }
+            function enableExtraQuit(){
+                const extraQuit = document.getElementById('extraQuit');
+                extraQuit.style.display = 'block';
+            }
+            function disableExtraQuit(){
+                const extraQuit = document.getElementById('extraQuit');
+                extraQuit.style.display = 'none';
+            }
+            function end(){
+                disableContinue();
+                disableQuit();
+                disableExtraQuit();
+                sleep(1000);
+                start('loginPage');
+            }
+            function setDialog(){
+                title.innerHTML = levelTitles[level - 1];
+                if (title.innerHTML == undefined){
+                    title.innerHTML = '';
+                }
+                switch(level){
+                    case 1:
+                        contentOfDialog = contentOfDialogOfLV1;
+                        break;
+                    case 2:
+                        contentOfDialog = contentOfDialogOfLV2;
+                        break;
+                    case 3:
+                        contentOfDialog = contentOfDialogOfLV3;
+                        break;
+                    case 4:
+                        contentOfDialog = contentOfDialogOfLV4;
+                        break;
+                    default:
+                        contentOfDialog = '你的表現令人印象深刻，新兵。你已經證明了自己對中國航天事業的深刻理解。長征火箭已經準備就緒，現在，準備好迎接你的第一次發射任務，去征服星辰大海吧！';
+                        break;
+                }
+                lengthOfContentOfDialog = contentOfDialog.length;
+            }
+            async function typeDialog(){
+                setDialog();
+                is_typed = false;
+                const blinkinterval = 100; 
+                for (wordsTyped = 0; wordsTyped < lengthOfContentOfDialog; wordsTyped++){
+                    let blinkTimes = Math.round(Math.random() * 3);
+                    for (let t = 0; t < blinkTimes; t++){
+                        dialog.innerHTML += '|';
+                        await sleep(blinkinterval);
+                        dialog.innerHTML = dialog.innerHTML.replace('|', '');
+                        await sleep(blinkinterval);
+                    }
+                    dialog.innerHTML += contentOfDialog[wordsTyped] + '|';
+                    dialog.innerHTML = dialog.innerHTML.replace('|', '');
+                }
+                is_typed = true;
+            }
+                function waitForTyping(){
+                return new Promise((resolve) => {
+                    const checkTyping = setInterval(() => {
+                        if (is_typed) {
+                            clearInterval(checkTyping);
+                            resolve();
+                        }
+                    }, 100); 
+                });   
+            }
+            async function waitForAnswering(){
+                let t;
+                is_timeOut = false;
+                for(t = 30; t >= 0; t--){
+                    await sleep(1000);
+                    if(t < 10){
+                        document.getElementById('countdown').innerText = `0${t}`;
+                    } else {
+                        document.getElementById('countdown').innerText = t;
+                    }
+                    if(is_answered){
+                        break;
+                    }
+                }
+                if (t == 0){
+                    is_timeOut = true;
+                }
+            }
+            function setQuestionCardHTML(questionNum, questionKey, choices){
+                return `
+                    <div id="question-card">
+                        <h1 id="question">問題 ${questionNum}: ${questionKey}?</h1>
+                        <div id="choices-rack">
+                            <button class="choices" id="A" onclick="choose('A');"><div class="insideBorder" id="insideBorder-A">A. ${choices['A']}</div></button>
+                            <button class="choices" id="B" onclick="choose('B');"><div class="insideBorder" id="insideBorder-B">B. ${choices['B']}</button>
+                            <button class="choices" id="C" onclick="choose('C');"><div class="insideBorder" id="insideBorder-C">C. ${choices['C']}</button>
+                            <button class="choices" id="D" onclick="choose('D');"><div class="insideBorder" id="insideBorder-D">D. ${choices['D']}</button>
+                        </div>
+                        <p id="explaination"></p>
+                    </div>`;
+            }
+            function generateExplanation(level, questionKey){
+                let explainationText;
+                switch(level){
+                    case 1:
+                        explainationText = questionsOfLV1[questionKey].explaination;
+                        break;
+                    case 2:
+                        explainationText = questionsOfLV2[questionKey].explaination;
+                        break;
+                    case 3:
+                        explainationText = questionsOfLV3[questionKey].explaination;
+                        break;
+                    case 4:
+                        explainationText = questionsOfLV4[questionKey].explaination;
+                        break;
+                    default:
+                        explainationText = '';
+                        break;
+                }
+                return explainationText;
+            }
+            function showQuestionResult(questionKey){
+                let correctRepresentation;
+                let incorrectRepresentations = [];
+                let answerKey = [];
+                const symbols = ['A', 'B', 'C', 'D'];
+                const explaination = document.getElementById('explaination');
+                symbols.forEach((representation) => {
+                    answerKey.push(is_correct(level, questionKey, document.getElementById(representation).innerText.slice(3)));
+                });
+                answerKey.forEach((result, i) => {
+                    if (result){
+                        correctRepresentation = symbols[i];
+                        return;
+                    }
+                })
+                symbols.forEach((representation) => {
+                    if (representation != correctRepresentation){
+                        incorrectRepresentations.push(representation);
+                    }
+                });
+                let coorespondingCorrectInnerBorder = document.getElementById('insideBorder-' + correctRepresentation);
+                coorespondingCorrectInnerBorder.style.setProperty('border-color', 'green')
+                incorrectRepresentations.forEach((representation) => {
+                    let coorespondingIncorrectInnerBorder = document.getElementById('insideBorder-' + representation);
+                    coorespondingIncorrectInnerBorder.style.setProperty('border-color', 'red')
+                });
+                if($is_correct){
+                    explaination.innerText = `✅正確 : ${generateExplanation(level, questionKey)}`;
+                } else if (!is_timeOut) {
+                    enableRedo();
+                    explaination.innerText = `❌答錯了 , 正確答案是 ${document.getElementById(correctRepresentation).innerText}, ${generateExplanation(level, questionKey)}`;
+                } else {
+                    enableRedo();
+                    explaination.innerText = `⌛時間到！正確答案是 ${document.getElementById(correctRepresentation).innerText}, ${generateExplanation(level, questionKey)}`;
+                }
+                enableNextQuestion();
+            }
+            async function generateQuestionCard(questionKey, step = 1){
+                let symbols = ['A', 'B', 'C', 'D'];
+                let choices = {};
+                let options = [];
+                questionNum += step;
+                console.log(questionCardHTML);
+                const questionCard = document.getElementById('question-card');
+                questionCard.innerHTML = ``;
+                shuttleArray(symbols);
+                $is_correct = false;
+                disableNextQuestion();
+                switch(level){
+                    case 1:
+                        disableRedo();
+                        dialog.innerHTML = '';
+                        options = questionsOfLV1[questionKey].incorrect.slice();
+                        options.push(questionsOfLV1[questionKey].correct);
+                        shuttleArray(options);
+                        for (let choiceIndex = 0; choiceIndex < 4; choiceIndex++){
+                            choices[symbols[choiceIndex]] = options[choiceIndex];
+                        }
+                        break;
+                    case 2:
+                        if (!plot_passed){
+                            disableExtraQuit();
+                            dialog.innerHTML = '';
+                            contentOfDialog = contentOfDialogOfLV2;
+                            lengthOfContentOfDialog = contentOfDialog.length;
+                            plot_passed = true;
+                            wordsTyped = 0;
+                            enableQuit();
+                            typeDialog();
+                        }
+                        await waitForTyping();
+                        disableRedo();
+                        dialog.innerHTML = '';
+                        options = questionsOfLV2[questionKey].incorrect.slice();
+                        options.push(questionsOfLV2[questionKey].correct);
+                        shuttleArray(options);
+                        for (let choiceIndex = 0; choiceIndex < 4; choiceIndex++){
+                            choices[symbols[choiceIndex]] = options[choiceIndex];
+                        }
+                        break;
+                    case 3:
+                        if (!plot_passed){
+                            disableExtraQuit();
+                            dialog.innerHTML = '';
+                            contentOfDialog = contentOfDialogOfLV3;
+                            lengthOfContent = contentOfDialog.length;
+                            plot_passed = true;
+                            wordsTyped = 0;
+                            enableQuit();
+                            typeDialog();
+                        }
+                        await waitForTyping();
+                        disableRedo();
+                        dialog.innerHTML = '';
+                        options = questionsOfLV3[questionKey].incorrect.slice();
+                        options.push(questionsOfLV3[questionKey].correct);
+                        shuttleArray(options);
+                        for (let choiceIndex = 0; choiceIndex < 4; choiceIndex++){
+                            choices[symbols[choiceIndex]] = options[choiceIndex];
+                        }
+                        break;
+                    case 4:
+                        if (!plot_passed){
+                            disableExtraQuit();
+                            dialog.innerHTML = '';
+                            contentOfDialog = contentOfDialogOfLV4;
+                            lengthOfContentOfDialog = contentOfDialog.length;
+                            plot_passed = true;
+                            wordsTyped = 0;
+                            enableQuit();
+                            typeDialog();
+                        }
+                        await waitForTyping();
+                        disableRedo();
+                        dialog.innerHTML = '';
+                        options = questionsOfLV4[questionKey].incorrect.slice();
+                        options.push(questionsOfLV4[questionKey].correct);
+                        shuttleArray(options);
+                        for (let choiceIndex = 0; choiceIndex < 4; choiceIndex++){
+                            choices[symbols[choiceIndex]] = options[choiceIndex];
+                        }
+                        break;
+                    default:
+                        typeDialog();
+                        waitForTyping();
+                        end();
+                        return null;
+                        break;
+                }
+                questionCardHTML = setQuestionCardHTML(questionNum, questionKey, choices);
+                is_answered = false;
+                $is_correct = false;
+                questionCard.innerHTML += questionCardHTML;
+                enableExtraQuit();
+                await waitForAnswering();
+                if (!is_timeOut){
+                    $is_correct = is_correct(level, questionKey, choice);  
+                } 
+                showQuestionResult(questionKey);
+            }
+            function showQuestion(step = 1){
+                if (step != 0){
+                    questionNumOfInstantLV = questionNum % 5;
+                    if (questionNumOfInstantLV == 0 && questionNum != 0){
+                        level += 1;
+                        questionNumOfInstantLV = 0;
+                        plot_passed = false;
+                    }
+                }
+                switch(level){
+                    case 1:
+                        questionKey = questionKeysOfLV1.at(questionNumOfInstantLV - 1);
+                        break;
+                    case 2:
+                        questionKey = questionKeysOfLV2.at(questionNumOfInstantLV - 1);
+                        break;
+                    case 3:
+                        questionKey = questionKeysOfLV3.at(questionNumOfInstantLV - 1);
+                        break;
+                    case 4:
+                        questionKey = questionKeysOfLV4.at(questionNumOfInstantLV - 1);
+                        break;
+                    default:
+                        break;
+                }
+                generateQuestionCard(questionKey, step);
+            }
+            function clickingContinue(){
+                if (wordsTyped == 0){
+                    typeDialog();
+                } else {
+                    dialog.innerHTML = '';
+                    showQuestion();
+                }
+            }
+            function clickingQuitOrRedo(){
+                const clickOrRedo = document.getElementById('quitOrRedo');
+                if (clickOrRedo.innerText == '退出遊戲'){
+                    quit();
+                } else {
+                    showQuestion(0);
+                }
+            }
+            function choose(representation){
+                let chosen = document.getElementById(representation);
+                chosen.style.setProperty('animation', 'blink 0.5s linear 1');
+                chosen.style.setProperty('border-color', 'purple');
+                choice = chosen.innerText;
+                choice = choice.slice(3);
+                is_answered = true;
+            }
+            // main
+            typeDialog();
+            disableContinue();
+            waitForTyping();
+            enableContinue();
+        </script>
+    </body>
+</html>
