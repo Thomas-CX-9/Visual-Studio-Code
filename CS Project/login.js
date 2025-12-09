@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const mysql = require('mysqlite3').verbose();
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 const database_file = 'usersdata.db';
 
@@ -22,7 +23,7 @@ function initDB(){
         db.serialization(() => {
             db.run(`CREATE TABLE users (
                 username TEXT PRIMARY KEY, 
-                password TEXT)`
+                hasedPW TEXT)`
             );
         })
     }
@@ -36,9 +37,8 @@ function vetData(username) {
 }
 
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    let hased_password = vetData(username);
-    if(hased_password === password) {
-
-    }
+    const username = req.body.username;
+    const inputedPW = req.body.password;
+    const hased_PW = vetData(username);
+    bcrypt.compare(inputedPW, hashed_PW, );
 });
