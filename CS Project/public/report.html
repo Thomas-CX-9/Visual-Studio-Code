@@ -1,1 +1,52 @@
-
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Report</title>
+        <link rel='stylesheet' href='controlButton.css'>
+    </head>
+    <style>
+        #title{
+            font-size: 50px;
+            text-decoration: underline, bold, italics;
+            text-align: center;
+        }
+        p{
+            color: white;
+            background-color: green;
+            font-size: 30px;
+            width: 90%;
+            margin: 0px auto;
+            text-align: center;
+        }
+    </style>
+    <body>
+        <h1 id='title'>成績表</h1>
+        <hr/>
+        <p id='score-and-trial'></p>
+        <br/>
+        <p id='avg-score'></p>
+        <br/>
+        <p id='is_passed'></p>
+        <br/>
+        <button id='continue'>再試一次</button>
+        <button id='quit'>退出遊戲</button>
+        <script>
+            let avgScore = localStorage.getItem('score');
+            let trial = localStorage.getItem('trial');
+            let score = avgScore / 100 * trial;
+            const basicResult = document.getElementById('score-and-trial');
+            const overallResult = document.getElementById('avg-score');
+            const summary = document.getElementById('is_passed');
+            basicResult.innerText = `分數 : ${score}               回答次數 : ${trial}`;
+            overallResult.innerText = `平均得分 : ${avgScore}`;
+            if (avgScore >= 40){
+                summary.innerText = '是否合格 : 是';
+                summary.style.setProperty('background-color', 'green');
+            } else {
+                summary.innerText = '是否合格 : 否';
+                summary.style.setProperty('background-color', 'red');
+            }
+        </script>
+    </body>
+</html>
