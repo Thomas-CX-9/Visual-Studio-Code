@@ -129,6 +129,8 @@
             let is_typed;
             let choice;
             let is_timeOut;
+            let trial = 0;
+            let score = 0;
             function disableRedo(){
                 quitOrRedo.innerText = '重來一遍';
                 quitOrRedo.disabled = true;
@@ -315,6 +317,7 @@
                 });
                 if($is_correct){
                     explaination.innerText = `✅正確 : ${generateExplanation(level, questionKey)}`;
+                    score += 1;
                 } else if (!is_timeOut) {
                     enableRedo();
                     explaination.innerText = `❌答錯了 , 正確答案是 ${document.getElementById(correctRepresentation).innerText}, ${generateExplanation(level, questionKey)}`;
@@ -412,6 +415,8 @@
                     default:
                         typeDialog();
                         waitForTyping();
+                        score /= trial;
+                        localStorage.setItem('score', score);
                         end();
                         return null;
                         break;
@@ -428,6 +433,7 @@
                 showQuestionResult(questionKey);
             }
             function showQuestion(step = 1){
+                trial +=1;
                 if (step != 0){
                     questionNumOfInstantLV = questionNum % 5;
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
