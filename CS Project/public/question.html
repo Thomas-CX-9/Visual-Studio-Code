@@ -56,6 +56,7 @@
         }
         #question-card{
             background-color: white;
+            padding: 5px;
             box-shadow: 0px 0px 10px black;
             border: 1px solid black;
             top: 400px;
@@ -345,6 +346,7 @@
                 let choices = {};
                 let options = [];
                 questionNum += step;
+                is_timeOut = false;
                 console.log(questionCardHTML);
                 const questionCard = document.getElementById('question-card');
                 questionCard.innerHTML = ``;
@@ -363,7 +365,10 @@
                         }
                         break;
                     case 2:
+                        questionCard.style.display = 'none';
                         bg.src = 'images/lv2Background.jpeg';
+                        dialog.style.color = 'white';
+                        title.sytle.color = 'white';
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -385,7 +390,10 @@
                         }
                         break;
                     case 3:
+                        questionCard.style.display = 'none';
                         bg.src = 'images/lv3Background.jpeg';
+                        dialog.style.color = 'black';
+                        title.style.color = 'black';
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -407,7 +415,10 @@
                         }
                         break;
                     case 4:
+                        questionCard.style.display = 'none';
                         bg.src = 'images/lv4Background.jpeg';
+                        dialog.style.color = 'white';
+                        title.sytle.color = 'white';
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -429,7 +440,10 @@
                         }
                         break;
                     default:
+                        questionCard.style.display = 'none';
                         bg.src = 'images/endBackground';
+                        dialog.style.color = 'black';
+                        title.style.color = 'black';
                         typeDialog();
                         waitForTyping();
                         score /= trial;
@@ -440,6 +454,7 @@
                         end();
                         break;
                 }
+                questionCard.style.display = 'block';
                 questionCardHTML = setQuestionCardHTML(questionNum, questionKey, choices);
                 is_answered = false;
                 $is_correct = false;
@@ -448,7 +463,9 @@
                 await waitForAnswering();
                 if (!is_timeOut){
                     $is_correct = is_correct(level, questionKey, choice);  
-                } 
+                } else {
+                    is_timeOut = true;
+                }
                 showQuestionResult(questionKey);
             }
             function showQuestion(step = 1){
@@ -504,6 +521,7 @@
                 is_answered = true;
             }
             // main
+            document.getElementById('question-card').style.display = 'none';
             typeDialog();
             disableContinue();
             waitForTyping();
