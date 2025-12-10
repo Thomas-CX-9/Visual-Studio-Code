@@ -18,6 +18,8 @@
             width: 90%;
             margin: 0px auto;
             text-align: center;
+            border-radius: 3px;
+            border: none;
         }
     </style>
     <body>
@@ -34,12 +36,18 @@
             <button class='control-button' id='quit'>退出遊戲</button>
         </div>
         <script>
-            let avgScore = localStorage.getItem('score');
+            let avgScore = localStorage.getItem('score'); 
             let trial = localStorage.getItem('trial');
             let score = avgScore / 100 * trial;
             const basicResult = document.getElementById('score-and-trial');
             const overallResult = document.getElementById('avg-score');
             const summary = document.getElementById('is_passed');
+            if (!avgScore){
+                avgScore = 0;
+            }
+            if (!trial){
+                trial = 0;
+            }
             basicResult.innerText = `分數 : ${score}               回答次數 : ${trial}`;
             overallResult.innerText = `平均得分 : ${avgScore}`;
             if (avgScore >= 40){
