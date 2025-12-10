@@ -197,7 +197,7 @@
                 disableQuit();
                 disableExtraQuit();
                 sleep(1000);
-                start('loginPage');
+                start('report');
             }
             function setDialog(){
                 title.innerHTML = levelTitles[level - 1];
@@ -429,6 +429,7 @@
                         }
                         break;
                     default:
+                        bg.src = 'images/endBackground';
                         typeDialog();
                         waitForTyping();
                         score /= trial;
