@@ -29,8 +29,10 @@
         <br/>
         <p id='is_passed'></p>
         <br/>
-        <button id='continue'>再試一次</button>
-        <button id='quit'>退出遊戲</button>
+        <div id='control-rank'>
+            <button id='continue'>再試一次</button>
+            <button id='quit'>退出遊戲</button>
+        </div>
         <script>
             let avgScore = localStorage.getItem('score');
             let trial = localStorage.getItem('trial');
