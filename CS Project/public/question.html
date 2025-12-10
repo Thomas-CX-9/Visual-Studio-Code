@@ -210,6 +210,7 @@
                 start('report');
             }
             function setDialog(){
+                disableContinue();
                 title.innerHTML = levelTitles[level - 1];
                 if (title.innerHTML == undefined){
                     title.innerHTML = '';
@@ -377,7 +378,7 @@
                         questionCard.style.display = 'none';
                         bg.src = 'images/lv2Background.jpeg';
                         dialog.style.color = 'white';
-                        title.sytle.color = 'white';
+                        title.style.color = 'white';
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -531,8 +532,8 @@
             }
             // main
             document.getElementById('question-card').style.display = 'none';
-            typeDialog();
             disableContinue();
+            typeDialog();
             waitForTyping();
             enableContinue();
         </script>
