@@ -32,9 +32,10 @@
         <p id='is_passed'></p>
         <br/>
         <div id='control-rack'>
-            <button class='control-button' id='continue'>再試一次</button>
-            <button class='control-button' id='quit'>退出遊戲</button>
+            <button class='control-button' id='continue' onclick="start('question');">再試一次</button>
+            <button class='control-button' id='quit' onclick="quit();">退出遊戲</button>
         </div>
+        <script src="controller.js"></script>
         <script>
             let avgScore = localStorage.getItem('score'); 
             let trial = localStorage.getItem('trial');
