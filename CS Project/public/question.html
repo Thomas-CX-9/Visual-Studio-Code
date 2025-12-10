@@ -252,10 +252,11 @@
                 }
                 is_typed = true;
             }
-                function waitForTyping(){
+            async function waitForTyping(){
                 return new Promise((resolve) => {
                     const checkTyping = setInterval(() => {
                         if (is_typed) {
+                            await sleep(500);
                             clearInterval(checkTyping);
                             resolve();
                         }
@@ -460,7 +461,7 @@
                         dialog.style.color = 'black';
                         title.style.color = 'black';
                         typeDialog();
-                        waitForTyping();
+                        await waitForTyping();
                         trial -= 1;
                         score /= trial;
                         score *= 100;
