@@ -377,7 +377,7 @@
                         break;
                     case 2:
                         questionCard.style.display = 'none';
-                        bg.src = 'images/lv2Background.jpeg';
+                        await bg.src = 'images/lv2Background.jpeg';
                         dialog.style.color = 'white';
                         title.style.color = 'white';
                         if (!plot_passed){
@@ -402,7 +402,7 @@
                         break;
                     case 3:
                         questionCard.style.display = 'none';
-                        bg.src = 'images/lv3Background.jpeg';
+                        await bg.src = 'images/lv3Background.jpeg';
                         dialog.style.color = 'black';
                         title.style.color = 'black';
                         if (!plot_passed){
@@ -427,9 +427,9 @@
                         break;
                     case 4:
                         questionCard.style.display = 'none';
-                        bg.src = 'images/lv4Background.jpeg';
+                        await bg.src = 'images/lv4Background.jpeg';
                         dialog.style.color = 'white';
-                        title.sytle.color = 'white';
+                        title.style.color = 'white';
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
