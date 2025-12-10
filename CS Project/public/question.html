@@ -433,9 +433,10 @@
                         typeDialog();
                         waitForTyping();
                         score /= trial;
+                        score *= 100;
+                        score = Math.round(score);
                         localStorage.setItem('score', score);
                         end();
-                        return null;
                         break;
                 }
                 questionCardHTML = setQuestionCardHTML(questionNum, questionKey, choices);
