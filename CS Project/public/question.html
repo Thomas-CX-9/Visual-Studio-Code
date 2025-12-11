@@ -3,6 +3,7 @@
     <head>
         <title>Question</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="controlButton.css">
     </head>
     <style>
@@ -315,6 +316,8 @@
                 return explainationText;
             }
             function showQuestionResult(questionKey){
+                try {
+                    // Your existing code
                 let correctRepresentation;
                 let incorrectRepresentations = [];
                 let answerKey = [];
@@ -351,6 +354,11 @@
                     explaination.innerText = `⌛時間到！正確答案是 ${document.getElementById(correctRepresentation).innerText}, ${generateExplanation(level, questionKey)}`;
                 }
                 enableNextQuestion();
+                } catch (error) {
+                    console.error("Error occurred:", error);
+                    // Optionally display the error on the page
+                    document.body.insertAdjacentHTML('beforeend', `<p>Error: ${error.message}</p>`);
+                }
             }
             async function changeBG(){
                 const bg = document.getElementById('background');
@@ -450,7 +458,7 @@
                         break;
                     default:
                         questionCard.style.display = 'none';
-                        await changeBG();
+                        bg.src = 'images/endBackground.jpeg';
                         dialog.style.color = 'black';
                         title.style.color = 'black';
                         typeDialog();
