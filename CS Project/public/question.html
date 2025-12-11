@@ -277,7 +277,7 @@
                         break;
                     }
                 }
-                if (t == 0){
+                if (t <= 0){
                     is_timeOut = true;
                 }
             }
@@ -486,7 +486,7 @@
                 showQuestionResult(questionKey);
             }
             function showQuestion(step = 1){
-                trial +=1;
+                trial += 1;
                 if (step != 0){
                     questionNumOfInstantLV = questionNum % 5;
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
