@@ -284,7 +284,6 @@
             }
             function setQuestionCardHTML(questionNum, questionKey, choices){
                 return `
-                    <div id="question-card">
                         <h1 id="question">問題 ${questionNum}: ${questionKey}?</h1>
                         <div id="choices-rack">
                             <button class="choices" id="A" onclick="choose('A');"><div class="insideBorder" id="insideBorder-A">A. ${choices['A']}</div></button>
@@ -292,8 +291,7 @@
                             <button class="choices" id="C" onclick="choose('C');"><div class="insideBorder" id="insideBorder-C">C. ${choices['C']}</div></button>
                             <button class="choices" id="D" onclick="choose('D');"><div class="insideBorder" id="insideBorder-D">D. ${choices['D']}</div></button>
                         </div>
-                        <p id="explaination"></p>
-                    </div>`;
+                        <p id="explaination"></p>`;
             }
             function generateExplanation(level, questionKey){
                 let explainationText;
