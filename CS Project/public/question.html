@@ -155,7 +155,7 @@
             let is_timeOut;
             let trial = 0;
             let score = 0;
-             let $is_correct;
+            let $is_correct;
             function disableRedo(){
                 quitOrRedo.innerText = '重來一遍';
                 quitOrRedo.disabled = true;
@@ -481,10 +481,9 @@
                 showQuestionResult(questionKey);
             }
             function showQuestion(step = 1){
-                let questionNumOfInstantLV;
+                let questionNumOfInstantLV = questionNum % 5;
                 trial += 1;
                 if (step != 0){
-                    questionNumOfInstantLV = questionNum % 5;
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
                         level += 1;
                         questionNumOfInstantLV = 0;
