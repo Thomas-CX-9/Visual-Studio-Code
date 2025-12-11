@@ -389,8 +389,6 @@
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
-                            contentOfDialog = contentOfDialogOfLV2;
-                            lengthOfContentOfDialog = contentOfDialog.length;
                             plot_passed = true;
                             wordsTyped = 0;
                             enableQuit();
@@ -414,8 +412,6 @@
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
-                            contentOfDialog = contentOfDialogOfLV3;
-                            lengthOfContentOfDialog = contentOfDialog.length;
                             plot_passed = true;
                             wordsTyped = 0;
                             enableQuit();
@@ -439,8 +435,6 @@
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
-                            contentOfDialog = contentOfDialogOfLV4;
-                            lengthOfContentOfDialog = contentOfDialog.length;
                             plot_passed = true;
                             wordsTyped = 0;
                             enableQuit();
@@ -487,9 +481,10 @@
                 showQuestionResult(questionKey);
             }
             function showQuestion(step = 1){
+                let questionNumOfInstantLV;
                 trial += 1;
                 if (step != 0){
-                    let questionNumOfInstantLV = questionNum % 5;
+                    questionNumOfInstantLV = questionNum % 5;
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
                         level += 1;
                         questionNumOfInstantLV = 0;
@@ -538,7 +533,7 @@
             async function initalize(){
                 document.getElementById('question-card').style.display = 'none';
                 disableContinue();
-                typeDialog();
+                await typeDialog();
                 await waitForTyping();
                 enableContinue();
             }
