@@ -356,7 +356,7 @@
             }
             async function changeBG(){
                 const bg = document.getElementById('background');
-                await bg.src = `images/lv${level}Background.jpeg`;
+                bg.src = `images/lv${level}Background.jpeg`;
             }
             async function generateQuestionCard(questionKey, step = 1){
                 let symbols = ['A', 'B', 'C', 'D'];
@@ -489,7 +489,7 @@
             function showQuestion(step = 1){
                 trial += 1;
                 if (step != 0){
-                    questionNumOfInstantLV = questionNum % 5;
+                    let questionNumOfInstantLV = questionNum % 5;
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
                         level += 1;
                         questionNumOfInstantLV = 0;
@@ -515,12 +515,8 @@
                 generateQuestionCard(questionKey, step);
             }
             function clickingContinue(){
-                if (wordsTyped == 0){
-                    typeDialog();
-                } else {
-                    dialog.innerHTML = '';
-                    showQuestion();
-                }
+                dialog.innerHTML = '';
+                showQuestion();
             }
             function clickingQuitOrRedo(){
                 const clickOrRedo = document.getElementById('quitOrRedo');
@@ -539,11 +535,14 @@
                 is_answered = true;
             }
             // main
-            document.getElementById('question-card').style.display = 'none';
-            disableContinue();
-            typeDialog();
-            await waitForTyping();
-            enableContinue();
+            async function initalize(){
+                document.getElementById('question-card').style.display = 'none';
+                disableContinue();
+                typeDialog();
+                await waitForTyping();
+                enableContinue();
+            }
+            initalize();
         </script>
     </body>
 </html>
