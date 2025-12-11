@@ -155,6 +155,7 @@
             let is_timeOut;
             let trial = 0;
             let score = 0;
+             let $is_correct;
             function disableRedo(){
                 quitOrRedo.innerText = '重來一遍';
                 quitOrRedo.disabled = true;
@@ -254,7 +255,7 @@
             }
             async function waitForTyping(){
                 return new Promise((resolve) => {
-                    const checkTyping = setInterval(() => {
+                    const checkTyping = setInterval(async () => {
                         if (is_typed) {
                             await sleep(500);
                             clearInterval(checkTyping);
@@ -287,9 +288,9 @@
                         <h1 id="question">問題 ${questionNum}: ${questionKey}?</h1>
                         <div id="choices-rack">
                             <button class="choices" id="A" onclick="choose('A');"><div class="insideBorder" id="insideBorder-A">A. ${choices['A']}</div></button>
-                            <button class="choices" id="B" onclick="choose('B');"><div class="insideBorder" id="insideBorder-B">B. ${choices['B']}</button>
-                            <button class="choices" id="C" onclick="choose('C');"><div class="insideBorder" id="insideBorder-C">C. ${choices['C']}</button>
-                            <button class="choices" id="D" onclick="choose('D');"><div class="insideBorder" id="insideBorder-D">D. ${choices['D']}</button>
+                            <button class="choices" id="B" onclick="choose('B');"><div class="insideBorder" id="insideBorder-B">B. ${choices['B']}</div></button>
+                            <button class="choices" id="C" onclick="choose('C');"><div class="insideBorder" id="insideBorder-C">C. ${choices['C']}</div></button>
+                            <button class="choices" id="D" onclick="choose('D');"><div class="insideBorder" id="insideBorder-D">D. ${choices['D']}</div></button>
                         </div>
                         <p id="explaination"></p>
                     </div>`;
@@ -353,9 +354,9 @@
                 }
                 enableNextQuestion();
             }
-            function changeBG(){
+            async function changeBG(){
                 const bg = document.getElementById('background');
-                bg.src = `images/lv${level}Background.jpeg`;
+                await bg.src = `images/lv${level}Background.jpeg`;
             }
             async function generateQuestionCard(questionKey, step = 1){
                 let symbols = ['A', 'B', 'C', 'D'];
@@ -414,7 +415,7 @@
                             disableExtraQuit();
                             dialog.innerHTML = '';
                             contentOfDialog = contentOfDialogOfLV3;
-                            lengthOfContent = contentOfDialog.length;
+                            lengthOfContentOfDialog = contentOfDialog.length;
                             plot_passed = true;
                             wordsTyped = 0;
                             enableQuit();
@@ -541,7 +542,7 @@
             document.getElementById('question-card').style.display = 'none';
             disableContinue();
             typeDialog();
-            waitForTyping();
+            await waitForTyping();
             enableContinue();
         </script>
     </body>
