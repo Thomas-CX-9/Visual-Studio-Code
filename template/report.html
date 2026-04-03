@@ -3,7 +3,7 @@
     <head>
         <meta charset='UTF-8'>
         <title>Report</title>
-        <link rel='stylesheet' href='controlButton.css'>
+        <link rel='stylesheet' href='{{url_for("static", filename = "css/controlButton.css")}}'>
     </head>
     <style>
         #title{
@@ -35,7 +35,7 @@
             <button class='control-button' id='continue' onclick="start('question');">再試一次</button>
             <button class='control-button' id='quit' onclick="quit();">退出遊戲</button>
         </div>
-        <script src="controller.js"></script>
+        <script src="{{url_for('static', filename = 'js/controller.js')}}"></script>
         <script>
             let avgScore = localStorage.getItem('score'); 
             let trial = localStorage.getItem('trial');

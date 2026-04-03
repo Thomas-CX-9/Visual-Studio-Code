@@ -3,8 +3,8 @@
     <head>
         <title>Question</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="controlButton.css">
+        <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+        <link rel = "stylesheet" href="{{url_for('static', filename = 'css/controlButton.css')}}">
     </head>
     <style>
         #background{
@@ -116,95 +116,112 @@
         }
     </style>
     <body>
-        <img id='background' src="images/lv1Background.jpeg"/>
-        <button id="extraQuit">退出遊戲</button>
-        <h1 id="level"></h1>
-        <p id="dialog"></p>
-        <div id="control-rack">
-            <button class="control-button" id="quitOrRedo" onclick="clickingQuitOrRedo();">退出遊戲</button>
-            <button class="control-button" id="continue" onclick="clickingContinue();">繼續</button>
+        <img id = 'background' src = "{{url_for('static', filename = 'images/lv1Background.jpeg')}}"/>
+        <button id = "extraQuit">退出遊戲</button>
+        <h1 id = "level"></h1>
+        <p id = "dialog"></p>
+        <div id = "control-rack">
+            <button class = "control-button" id = "quitOrRedo" onclick="clickingQuitOrRedo();">退出遊戲</button>
+            <button class = "control-button" id = "continue" onclick="clickingContinue();">繼續</button>
         </div> 
-        <div id="timer">00:
-            <span id="countdown">30</span>
+        <div id = "timer">00:
+            <span id = "countdown">30</span>
         </div>
-        <div id='question-card'></div>
-        <script src="questioning.js"></script>
-        <script src="controller.js"></script> 
+        <div id = 'question-card'></div>
+
+        <script src = "{{url_for('static', filename = 'js/questioning.js')}}"></script>
+        <script src = "{{url_for('static', filename = 'js/controller.js')}}"></script> 
         <script>
-            let wordsTyped = 0;
             let level = 1;
             let questionKey;
             let questionCardHTML = '';
-            const dialog = document.getElementById('dialog');
+
+            let contentOfDialog;
+            let lengthOfContentOfDialog;
+            let is_typed;
+            let wordsTyped = 0;
+            const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）', '🔥 第四級：天宮組裝（極難）'];
             const contentOfDialogOfLV1 = '新兵，先來點簡單的基礎題，證明你不是誤闖的！';
             const contentOfDialogOfLV2 = '基礎知識通過！你獲得了進入神舟中心的許可權。接下來的任務是確保載人飛船與空間站的完美對接，考驗你對核心技術的理解！';
             const contentOfDialogOfLV3 = '很好，你對載人航天體系已經掌握！現在我們進入嫦娥工程，目標是月球和深空。回答這些關於補給與探測的題目！';
             const contentOfDialogOfLV4 = '離成功只有一步之遙！最終關卡是空間站和未來技術。回答這些關於重型發射和深空探測的難題，你就能成為正式的航天專家！';
+
+            const dialog = document.getElementById('dialog');
             const body = document.body;
             const title = document.getElementById('level');
             const continueButton = document.getElementById('continue');
             const quitOrRedo = document.getElementById('quitOrRedo');
             const bg = document.getElementById('background');
-            let contentOfDialog;
-            const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）', '🔥 第四級：天宮組裝（極難）'];
-            let questionNum = 0;
-            let lengthOfContentOfDialog;
-            let is_answered = true;
-            let plot_passed = false;
-            let is_typed;
-            let choice;
-            let is_timeOut;
+            
             let trial = 0;
             let score = 0;
+            let is_answered = true;
+            let plot_passed = false;
+
+            let choice;
+            let is_timeOut;
             let $is_correct;
+
+/////////////////////////////////////////////////////////////////////////////
+
             function disableRedo(){
                 quitOrRedo.innerText = '重來一遍';
                 quitOrRedo.disabled = true;
                 quitOrRedo.style.setProperty('background-color', 'rgb(100,100,100)');
             }
+
             function enableRedo(){
                 quitOrRedo.innerText = '重來一遍';
                 quitOrRedo.disabled = false;
                 quitOrRedo.style.setProperty('background-color', 'red');
             }
+
             function disableQuit(){
                 quitOrRedo.innerText = '退出遊戲';
                 quitOrRedo.disabled = true;
                 quitOrRedo.style.setProperty('background-color', 'rgb(100,100,100)');
             }
+
             function enableQuit(){
                 quitOrRedo.innerText = '退出遊戲';
                 quitOrRedo.disabled = false;
                 quitOrRedo.style.setProperty('background-color', 'red');
             }
+
             function disableContinue(){
                 continueButton.innerText = '繼續';
                 continueButton.disabled = true;
                 continueButton.style.setProperty('background-color', 'rgb(100,100,100)');
             }
+
             function enableContinue(){
                 continueButton.innerText = '繼續';
                 continueButton.disabled = false;
                 continueButton.style.setProperty('background-color', 'purple');
             }
+
             function disableNextQuestion(){
                 continueButton.innerText = '下一題';
                 continueButton.disabled = true;
                 continueButton.style.setProperty('background-color', 'rgb(100,100,100)');
             }
+
             function enableNextQuestion(){
                 continueButton.innerText = '下一題';
                 continueButton.disabled = false;
                 continueButton.style.setProperty('background-color', 'purple');
             }
+
             function enableExtraQuit(){
                 const extraQuit = document.getElementById('extraQuit');
                 extraQuit.style.display = 'block';
             }
+
             function disableExtraQuit(){
                 const extraQuit = document.getElementById('extraQuit');
                 extraQuit.style.display = 'none';
             }
+
             function end(){
                 disableContinue();
                 disableQuit();
@@ -212,6 +229,9 @@
                 sleep(1000);
                 start('report');
             }
+
+////////////////////////////////////////////////////////////////////
+
             function setDialog(){
                 disableContinue();
                 title.innerHTML = levelTitles[level - 1];
@@ -237,6 +257,7 @@
                 }
                 lengthOfContentOfDialog = contentOfDialog.length;
             }
+
             async function typeDialog(){
                 setDialog();
                 is_typed = false;
@@ -254,6 +275,7 @@
                 }
                 is_typed = true;
             }
+
             async function waitForTyping(){
                 return new Promise((resolve) => {
                     const checkTyping = setInterval(async () => {
@@ -265,10 +287,12 @@
                     }, 100); 
                 });   
             }
+
+//////////////////////////////////////////////////////////////////
+
             async function waitForAnswering(){
-                let t;
                 is_timeOut = false;
-                for(t = 30; t >= 0; t--){
+                for(let t = 30; t >= 0; t--){
                     await sleep(1000);
                     if(t < 10){
                         document.getElementById('countdown').innerText = `0${t}`;
@@ -283,14 +307,15 @@
                     is_timeOut = true;
                 }
             }
+
             function setQuestionCardHTML(questionNum, questionKey, choices){
                 return `
-                        <h1 id="question">問題 ${questionNum}: ${questionKey}?</h1>
-                        <div id="choices-rack">
-                            <button class="choices" id="A" onclick="choose('A');"><div class="insideBorder" id="insideBorder-A">A. ${choices['A']}</div></button>
-                            <button class="choices" id="B" onclick="choose('B');"><div class="insideBorder" id="insideBorder-B">B. ${choices['B']}</div></button>
-                            <button class="choices" id="C" onclick="choose('C');"><div class="insideBorder" id="insideBorder-C">C. ${choices['C']}</div></button>
-                            <button class="choices" id="D" onclick="choose('D');"><div class="insideBorder" id="insideBorder-D">D. ${choices['D']}</div></button>
+                        <h1 id = "question">問題 ${questionNum}: ${questionKey}?</h1>
+                        <div id = "choices-rack">
+                            <button class = "choices" id = "A" onclick = "choose('A');"><div class = "insideBorder" id = "insideBorder-A">A. ${choices['A']}</div></button>
+                            <button class = "choices" id = "B" onclick = "choose('B');"><div class = "insideBorder" id = "insideBorder-B">B. ${choices['B']}</div></button>
+                            <button class = "choices" id = "C" onclick = "choose('C');"><div class = "insideBorder" id = "insideBorder-C">C. ${choices['C']}</div></button>
+                            <button class = "choices" id = "D" onclick = "choose('D');"><div class = "insideBorder" id = "insideBorder-D">D. ${choices['D']}</div></button>
                         </div>
                         <p id="explaination"></p>`;
             }
@@ -315,14 +340,14 @@
                 }
                 return explainationText;
             }
+
             function showQuestionResult(questionKey){
-                try {
-                    // Your existing code
                 let correctRepresentation;
                 let incorrectRepresentations = [];
                 let answerKey = [];
                 const symbols = ['A', 'B', 'C', 'D'];
                 const explaination = document.getElementById('explaination');
+
                 symbols.forEach((representation) => {
                     answerKey.push(is_correct(level, questionKey, document.getElementById(representation).innerText.slice(3)));
                 });
@@ -343,6 +368,7 @@
                     let coorespondingIncorrectInnerBorder = document.getElementById('insideBorder-' + representation);
                     coorespondingIncorrectInnerBorder.style.setProperty('border-color', 'red')
                 });
+
                 if($is_correct){
                     explaination.innerText = `✅正確 : ${generateExplanation(level, questionKey)}`;
                     score += 1;
@@ -354,17 +380,14 @@
                     explaination.innerText = `⌛時間到！正確答案是 ${document.getElementById(correctRepresentation).innerText}, ${generateExplanation(level, questionKey)}`;
                 }
                 enableNextQuestion();
-                } catch (error) {
-                    console.error("Error occurred:", error);
-                    // Optionally display the error on the page
-                    document.body.insertAdjacentHTML('beforeend', `<p>Error: ${error.message}</p>`);
-                }
             }
+
             async function changeBG(){
                 const bg = document.getElementById('background');
-                bg.src = `images/lv${level}Background.jpeg`;
+                bg.src = `{{url_for('static', filename = 'images/lv${level}Background.jpeg')}}`;
             }
-            async function generateQuestionCard(questionKey, step = 1){
+
+            async function generateQuestionCard(questionKey, step = 1){ 
                 let symbols = ['A', 'B', 'C', 'D'];
                 let choices = {};
                 let options = [];
@@ -372,7 +395,7 @@
                 is_timeOut = false;
                 console.log(questionCardHTML);
                 const questionCard = document.getElementById('question-card');
-                questionCard.innerHTML = ``;
+                questionCard.innerHTML = '';
                 shuttleArray(symbols);
                 $is_correct = false;
                 disableNextQuestion();
@@ -380,6 +403,7 @@
                     case 1:
                         disableRedo();
                         dialog.innerHTML = '';
+
                         options = questionsOfLV1[questionKey].incorrect.slice();
                         options.push(questionsOfLV1[questionKey].correct);
                         shuttleArray(options);
@@ -392,6 +416,7 @@
                         await changeBG();
                         dialog.style.color = 'white';
                         title.style.color = 'white';
+
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -401,8 +426,10 @@
                             typeDialog();
                         }
                         await waitForTyping();
+
                         disableRedo();
                         dialog.innerHTML = '';
+
                         options = questionsOfLV2[questionKey].incorrect.slice();
                         options.push(questionsOfLV2[questionKey].correct);
                         shuttleArray(options);
@@ -415,6 +442,7 @@
                         await changeBG();
                         dialog.style.color = 'black';
                         title.style.color = 'black';
+
                         if (!plot_passed){
                             disableExtraQuit();
                             dialog.innerHTML = '';
@@ -424,8 +452,10 @@
                             typeDialog();
                         }
                         await waitForTyping();
+
                         disableRedo();
                         dialog.innerHTML = '';
+
                         options = questionsOfLV3[questionKey].incorrect.slice();
                         options.push(questionsOfLV3[questionKey].correct);
                         shuttleArray(options);
@@ -433,32 +463,9 @@
                             choices[symbols[choiceIndex]] = options[choiceIndex];
                         }
                         break;
-                    case 4:
-                        questionCard.style.display = 'none';
-                        await changeBG();
-                        dialog.style.color = 'white';
-                        title.style.color = 'white';
-                        if (!plot_passed){
-                            disableExtraQuit();
-                            dialog.innerHTML = '';
-                            plot_passed = true;
-                            wordsTyped = 0;
-                            enableQuit();
-                            typeDialog();
-                        }
-                        await waitForTyping();
-                        disableRedo();
-                        dialog.innerHTML = '';
-                        options = questionsOfLV4[questionKey].incorrect.slice();
-                        options.push(questionsOfLV4[questionKey].correct);
-                        shuttleArray(options);
-                        for (let choiceIndex = 0; choiceIndex < 4; choiceIndex++){
-                            choices[symbols[choiceIndex]] = options[choiceIndex];
-                        }
-                        break;
                     default:
                         questionCard.style.display = 'none';
-                        bg.src = 'images/endBackground.jpeg';
+                bg.src = `{{url_for('static', filename = 'images/endBackground.jpeg')}}`;
                         dialog.style.color = 'black';
                         title.style.color = 'black';
                         typeDialog();
@@ -486,13 +493,13 @@
                 }
                 showQuestionResult(questionKey);
             }
+
             function showQuestion(step = 1){
                 let questionNumOfInstantLV = questionNum % 5;
                 trial += 1;
                 if (step != 0){
                     if (questionNumOfInstantLV == 0 && questionNum != 0){
                         level += 1;
-                        questionNumOfInstantLV = 0;
                         plot_passed = false;
                     }
                 }
@@ -514,10 +521,12 @@
                 }
                 generateQuestionCard(questionKey, step);
             }
+
             function clickingContinue(){
                 dialog.innerHTML = '';
                 showQuestion();
             }
+
             function clickingQuitOrRedo(){
                 const clickOrRedo = document.getElementById('quitOrRedo');
                 if (clickOrRedo.innerText == '退出遊戲'){
@@ -526,6 +535,7 @@
                     showQuestion(0);
                 }
             }
+
             function choose(representation){
                 let chosen = document.getElementById(representation);
                 chosen.style.setProperty('animation', 'blink 0.5s linear 1');
@@ -534,6 +544,7 @@
                 choice = choice.slice(3);
                 is_answered = true;
             }
+
             // main
             async function initalize(){
                 document.getElementById('question-card').style.display = 'none';

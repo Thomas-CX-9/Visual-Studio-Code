@@ -9,10 +9,10 @@ function shuttleArray(array){
     return array;
 }
 const questionsOfLV1 = {
-    中國發射的第一顆人造衛星是 : {
-        correct : "東方紅一號",
-        incorrect : ["天宮一號", "神舟一號", "嫦娥一號"],
-        explaination : "東方紅一號於 1970 年成功發射，標誌著中國進入航天時代的開端，發射時播放的《東方紅》樂曲響徹太空，是中國航天事業的里程碑"
+    中國發射的第一顆人造衛星是 : { // qeuestion
+        correct : "東方紅一號", // correct ans
+        incorrect : ["天宮一號", "神舟一號", "嫦娥一號"], // incorrect ans
+        explaination : "東方紅一號於 1970 年成功發射，標誌著中國進入航天時代的開端，發射時播放的《東方紅》樂曲響徹太空，是中國航天事業的里程碑" // explanation of ans
     },
     中國首位進入太空的航天員是誰 : {
         correct : "楊利偉",
@@ -89,38 +89,10 @@ const questionsOfLV3 = {
         explaination : "返回艙通過氣動減速、降落傘開傘和反推火箭共同作用，最終實現軟著陸，這是載人返回的主要方式。"
     }
 }
-const questionsOfLV4 = {
-    中國規劃中的可重複使用火箭採用哪種技術 : {
-        correct : "垂直起降",
-        incorrect : ["水平降落", "水平起飛", "垂直回收"],
-        explaination : "垂直起降 (VTVL) 是實現火箭級間重複使用的主流技術路線，通過發動機反推實現精準著陸，能有效降低發射成本。"
-    },
-    負責將空間站核心艙送入軌道的重型火箭是 : {
-        correct : "長征五號",
-        incorrect : ["長征七號", "長征八號", "長征三號"],
-        explaination : "長征五號是為發射空間站艙段等近地軌道大型載荷專門研製的大推力火箭，被稱為「空間站專列」。"
-    },
-    天問一號探測器成功著陸火星的區域是 : {
-        correct : "烏托邦平原",
-        incorrect : ["祝融平原", "火星北極", "勇氣平原"],
-        explaination : "「祝融號」火星車著陸於火星的烏托邦平原南部，該處是科學家選定的目標區域，以便探測火星的地質和歷史。"
-    },
-    中國空間站的哪個艙段是核心艙 : {
-        correct : "天和",
-        incorrect : ["問天", "夢天", "載和"],
-        explaination : "天和核心艙是中國空間站的管理和控制中心，負責對接、組裝和控制整個空間站，是航天員的主要居所。"
-    },
-    嫦娥五號從月球採樣返回的關鍵技術是 : {
-        correct : "三者皆是",
-        incorrect : ["月面鑽取", "軌道無人交會", "高速再入"],
-        explaination : "嫦娥五號任務複雜，成功帶回月壤依靠月面鑽取、軌道交會對接、以及半彈道跳躍式高速再入等多項關鍵技術的完美配合。"
-    }
-}
 
 const questionKeysOfLV1 = shuttleArray(Object.keys(questionsOfLV1));
 const questionKeysOfLV2 = shuttleArray(Object.keys(questionsOfLV2));
 const questionKeysOfLV3 = shuttleArray(Object.keys(questionsOfLV3));
-const questionKeysOfLV4 = shuttleArray(Object.keys(questionsOfLV4));
 
 function is_correct(level, questionKey, choice){
     switch(level){
@@ -130,7 +102,5 @@ function is_correct(level, questionKey, choice){
             return questionsOfLV2[questionKey].correct == choice;
         case 3:
             return questionsOfLV3[questionKey].correct == choice;
-        case 4:
-            return questionsOfLV4[questionKey].correct == choice;
     }
 }

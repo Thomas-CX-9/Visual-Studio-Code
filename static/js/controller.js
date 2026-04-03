@@ -1,5 +1,5 @@
 function start(url){
-    window.location.href = `${url}.html`;               
+    window.location.href = `/${url}`;               
 }
 function quit(){
     start('mainPage');
