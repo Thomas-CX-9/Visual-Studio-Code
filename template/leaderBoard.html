@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>leader board</title>
+    </head>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1{
+            margin: 0;
+            font-size: 100px;
+            text-shadow: 0 0 8px gold;
+        }
+        table{
+            width: 80vW;
+            border: 2px solid black;
+            margin: 0;
+        }
+        tr{
+            border: 2px solid black;
+            height: 80px;
+        }
+        th{
+            border: 2px solid black;
+            font-size: 70px;
+        }
+        td{
+            border: 2px solid black;
+        }
+        .l{
+            width: 5%;
+            text-align: center;
+            font-size: 70px;
+        }
+        .m{
+            width: 70%;
+            text-align: center;
+            font-size: 50px;
+        }
+        .r{
+            width: 25%;
+            text-align: center;
+            font-size: 70px;
+        }
+        #st{
+            background-color: gold;
+        }
+        #nd{
+            background-color: silver;
+        }
+        #rd{
+            background-color: #CD7F32;
+        }
+    </style>
+    <body>
+        <h1>Leader Board</h1>
+        <table>
+            <tr>
+                <th class="l">Rank</th>
+                <th class="m">Name</th>
+                <th class="r">Score</th>
+            </tr>
+            <tr id="st">
+                <td class="l">1</td>
+                <td class="m" id="st-name"></td>
+                <td class="r" id="st-score"></td>
+            </tr>
+            <tr id="nd">
+                <td class="l">2</td>
+                <td class="m" id="nd-name"></td>
+                <td class="r" id="nd-score"></td>
+            </tr>
+            <tr id="rd">
+                <td class="l">3</td>
+                <td class="m" id="rd-name"></td>
+                <td class="r" id="rd-score"></td>
+            </tr>
+            <tr id="f">
+                <td class="l">4</td>
+                <td class="m" id="4-name"></td>
+                <td class="r" id="4-score"></td>
+            </tr>
+            <tr id="ff">
+                <td class="l">5</td>
+                <td class="m" id="5-name"></td>
+                <td class="r" id="5-score"></td>
+            </tr>
+        </table>
+        <script>
+            const stName = document.getElementById("st-name");
+            const stScore = document.getElementById("st-score");
+            const ndName = document.getElementById("nd-name");
+            const ndScore = document.getElementById("nd-score");
+            const rdName = document.getElementById("rd-name");
+            const rdScore = document.getElementById("rd-score");
+            const fName = document.getElementById("4-name");
+            const fScore = document.getElementById("4-score");
+            const ffName = document.getElementById("5-name");
+            const ffScore = document.getElementById("5-score");
+            const ordered_obj = {
+                st: [stName, stScore],
+                nd: [ndName, ndScore],
+                rd: [rdName, rdScore],
+                f: [fName, fScore],
+                ff: [ffName, ffScore]            
+            };
+            keysOfObj = Object.keys(ordered_obj)
+            async function getLeaderBoard(){
+                const response = await fetch("/api/leaderBoard", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify()
+                });
+                if (response.ok){
+                    const order = ['st', 'nd', 'rd', 'f', 'ff']
+                    let  data = await response.json();
+                    data = data.json()
+                    for (let i = 0; i < keysOfObj.length; i++){
+                        ordered_obj[keysOfObj[i]][0] = data[order[i]][username]
+                        ordered_obj[keysOfObj[i]][1] = data[order[i]][score]
+                    }
+                } else {
+                        alert('error');
+                }
+            }
+        </script>
+    </body>
+</html>
