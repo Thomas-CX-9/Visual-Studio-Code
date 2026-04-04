@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UFT-8">
         <title>Main Page</title>
     </head>
     <style>
@@ -41,7 +41,7 @@
         }
     </style>
     <body>
-        <img src = 'images/bgOfMainPage.jpeg' class="backgroud"/>
+        <img src = '{{url_for("static", filename = "images/bgOfMainPage.jpeg")}}' class="backgroud"/>
         <h1 id="title">中國航天員考核模擬器</h1>
         <button id="start" onclick="start('dialog');">開始</button>
         <script src="controller.js"></script>

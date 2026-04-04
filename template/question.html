@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
     <head>
         <title>Question</title>
-        <meta charset="UTF-8">
+        <meta charset="UFT-8">
         <meta name = "viewport" content="width=device-width, initial-scale=1.0">
         <link rel = "stylesheet" href="{{url_for('static', filename = 'css/controlButton.css')}}">
     </head>
@@ -117,7 +117,7 @@
     </style>
     <body>
         <img id = 'background' src = "{{url_for('static', filename = 'images/lv1Background.jpeg')}}"/>
-        <button id = "extraQuit">退出遊戲</button>
+        <button id = "extraQuit" onclick = "quit();">退出遊戲</button>
         <h1 id = "level"></h1>
         <p id = "dialog"></p>
         <div id = "control-rack">
@@ -133,6 +133,7 @@
         <script src = "{{url_for('static', filename = 'js/controller.js')}}"></script> 
         <script>
             let level = 1;
+            let questionNum = 1
             let questionKey;
             let questionCardHTML = '';
 
@@ -140,11 +141,10 @@
             let lengthOfContentOfDialog;
             let is_typed;
             let wordsTyped = 0;
-            const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）', '🔥 第四級：天宮組裝（極難）'];
+            const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）'];
             const contentOfDialogOfLV1 = '新兵，先來點簡單的基礎題，證明你不是誤闖的！';
             const contentOfDialogOfLV2 = '基礎知識通過！你獲得了進入神舟中心的許可權。接下來的任務是確保載人飛船與空間站的完美對接，考驗你對核心技術的理解！';
             const contentOfDialogOfLV3 = '很好，你對載人航天體系已經掌握！現在我們進入嫦娥工程，目標是月球和深空。回答這些關於補給與探測的題目！';
-            const contentOfDialogOfLV4 = '離成功只有一步之遙！最終關卡是空間站和未來技術。回答這些關於重型發射和深空探測的難題，你就能成為正式的航天專家！';
 
             const dialog = document.getElementById('dialog');
             const body = document.body;
@@ -226,6 +226,15 @@
                 disableContinue();
                 disableQuit();
                 disableExtraQuit();
+                const username = localStorage.getItem('username');
+                const score = localStorage.getItem('score');
+                fetch('/api/updateScore', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({username: username, score: score})
+                });
                 sleep(1000);
                 start('report');
             }
@@ -247,9 +256,6 @@
                         break;
                     case 3:
                         contentOfDialog = contentOfDialogOfLV3;
-                        break;
-                    case 4:
-                        contentOfDialog = contentOfDialogOfLV4;
                         break;
                     default:
                         contentOfDialog = '你的表現令人印象深刻，新兵。你已經證明了自己對中國航天事業的深刻理解。長征火箭已經準備就緒，現在，準備好迎接你的第一次發射任務，去征服星辰大海吧！';
@@ -330,9 +336,6 @@
                         break;
                     case 3:
                         explainationText = questionsOfLV3[questionKey].explaination;
-                        break;
-                    case 4:
-                        explainationText = questionsOfLV4[questionKey].explaination;
                         break;
                     default:
                         explainationText = '';
@@ -465,7 +468,7 @@
                         break;
                     default:
                         questionCard.style.display = 'none';
-                bg.src = `{{url_for('static', filename = 'images/endBackground.jpeg')}}`;
+                        bg.src = `{{url_for('static', filename = 'images/endBackground.jpeg')}}`;
                         dialog.style.color = 'black';
                         title.style.color = 'black';
                         typeDialog();
@@ -512,9 +515,6 @@
                         break;
                     case 3:
                         questionKey = questionKeysOfLV3.at(questionNumOfInstantLV - 1);
-                        break;
-                    case 4:
-                        questionKey = questionKeysOfLV4.at(questionNumOfInstantLV - 1);
                         break;
                     default:
                         break;

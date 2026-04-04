@@ -11,54 +11,62 @@ class user(db.Model):
     password = db.Column(db.String(50), nullable = False)
     score = db.Column(db.Integer, nullable = True)
 
+with app.app_context():
+    db.create_all()
+
 @app.route('/')
 def _redirect():
-    return render_template('login.html')
+    return flask.render_template('login.html')
 
-@app.route('/api/login', methods  = [['POST']])
+@app.route('/api/login', methods  = ['POST']])
 def login():
-    data = request.get_json()
+    data = flask.request.get_json()
     username = data.get('username')
     password = data.get('password')
-    coorespondingUser = db.query(username = username).first()
-    storedPW = coorespondingUser[password]
-    if storedPW == password:
+    coorespondingUser = user.query.filter_by(username = username).first()
+    if coorespondingUser.password and coorespondingUser.password == password:
         return flask.jsonify({}), 200
     else: 
         return flask.jsonify({}), 400
 
 @app.route('/api/register', methods = ['POST'])
 def register():
-    data = request.get_json
+    data = flask.request.get_json()
     username = data.get('username')
     password = data.get('password')
     try:
-        newID = len(db.query().all())
-        newUser = user(id = newID, username = username, password = password, score = None)
-        db.add(newUser)
-        db.commit()
+        newUser = user(username = username, password = password, score = None)
+        db.session.add(newUser)
+        db.session.commit()
         return flask.jsonify({}), 201
     except:
-        used_username = []
-        for u in db.query.all():
-            used_username.append(u.username)
-        if username in used_username:
-            return flask.jsonify({'message': 'repeated username'}), 400
-        else:
+        if len(username) > 20:
             return flask.jsonify({'message': 'password should be less than 21 words'}), 400
+        else:
+            return flask.jsonify({'message': 'repeated username'}), 400
 
-@app.route('/api/leaderBoard')
+@app.route('/api/leaderBoard', methods = ['GET'])
 def loadLeaderBoard():
     leaderBoard = {}
     order = ['st', 'nd', 'rd', 'f', 'ff']
-    top5 = db.query.order_by(db.score.desc(), db.username.desc()).limit(5).all()
+    top5 = user.query.order_by(user.score.desc(), user.username.desc()).limit(5).all()
     for u in top5:
         leaderBoard[order[top5.index(u)]] = {
             'username': u.username,
             'score': u.score
         }
-    return leaderBoard, 200
+    return flask.jsonify(leaderBoard), 200
 
-@app.route('/<url>')
+@app.route('/api/updateScore', methods = ['POST'])
+def updateScore():
+    data = flask.request.get_json()
+    username = data.get('username')
+    score = data.get('score')
+    highestScore = user.query.filter_by(username = username).first().score
+    if highestScore and highestScore < score:
+        user.query.filter_by(username = username).first().score = score
+        db.session.commit()
+
+@app.route('/page/<url>')
 def redirect(url):
-    return render_template(f'{url}.html')
+    return flask.render_template(f'{url}.html')

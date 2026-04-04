@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
     <head>
         <title>leader board</title>
+        <meta charset="UFT-8">
     </head>
     <style>
         body{
@@ -113,16 +114,14 @@
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify()
+                    }
                 });
                 if (response.ok){
-                    const order = ['st', 'nd', 'rd', 'f', 'ff']
+                    const order = ['st', 'nd', 'rd', 'f', 'ff'];
                     let  data = await response.json();
-                    data = data.json()
                     for (let i = 0; i < keysOfObj.length; i++){
-                        ordered_obj[keysOfObj[i]][0] = data[order[i]][username]
-                        ordered_obj[keysOfObj[i]][1] = data[order[i]][score]
+                        ordered_obj[keysOfObj[i]][0] = data[order[i]]['username'];
+                        ordered_obj[keysOfObj[i]][1] = data[order[i]]['score'];
                     }
                 } else {
                       for (let i = 0; i < keysOfObj.length; i++){
