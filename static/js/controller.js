@@ -7,3 +7,6 @@ function quit(){
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+function leaderboard(){
+    start('/leaderBoard');
+}

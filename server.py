@@ -62,4 +62,3 @@ def loadLeaderBoard():
 @app.route('/<url>')
 def redirect(url):
     return render_template(f'{url}.html')
-

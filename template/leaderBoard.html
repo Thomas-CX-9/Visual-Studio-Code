@@ -125,7 +125,10 @@
                         ordered_obj[keysOfObj[i]][1] = data[order[i]][score]
                     }
                 } else {
-                        alert('error');
+                      for (let i = 0; i < keysOfObj.length; i++){
+                        ordered_obj[keysOfObj[i]][0] = 'error';
+                        ordered_obj[keysOfObj[i]][1] = 'error';
+                    }  
                 }
             }
         </script>
