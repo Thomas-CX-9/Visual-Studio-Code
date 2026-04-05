@@ -142,9 +142,9 @@
             let is_typed;
             let wordsTyped = 0;
             const levelTitles = ['🌟 第一級：新兵報到（簡單）', '⭐ 第二級：神舟中心（中等）', '💫 第三級：嫦娥工程（困難）'];
-            const contentOfDialogOfLV1 = '新兵，先來點簡單的基礎題，證明你不是誤闖的！';
-            const contentOfDialogOfLV2 = '基礎知識通過！你獲得了進入神舟中心的許可權。接下來的任務是確保載人飛船與空間站的完美對接，考驗你對核心技術的理解！';
-            const contentOfDialogOfLV3 = '很好，你對載人航天體系已經掌握！現在我們進入嫦娥工程，目標是月球和深空。回答這些關於補給與探測的題目！';
+            const contentOfDialogOfLV1 = '編碼員，基礎電力系統損壞，請立即校準 5 組民生常量以重啟城市照明。';
+            const contentOfDialogOfLV2 = '底層架構已穩定，系統偵測到工業與生態鏈條斷裂，請連線校準中階發展數據。';
+            const contentOfDialogOfLV3 = '進入核心邏輯區，請解鎖最後 5 組全球競爭常量，這是修復文明坐標的唯一機會。';
 
             const dialog = document.getElementById('dialog');
             const body = document.body;
@@ -258,7 +258,7 @@
                         contentOfDialog = contentOfDialogOfLV3;
                         break;
                     default:
-                        contentOfDialog = '你的表現令人印象深刻，新兵。你已經證明了自己對中國航天事業的深刻理解。長征火箭已經準備就緒，現在，準備好迎接你的第一次發射任務，去征服星辰大海吧！';
+                        contentOfDialog = '數據常量全線歸位，全球通訊網已重新點亮，感謝你為人類守住了最後的星火。';
                         break;
                 }
                 lengthOfContentOfDialog = contentOfDialog.length;
