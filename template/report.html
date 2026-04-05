@@ -21,6 +21,20 @@
             border-radius: 3px;
             border: none;
         }
+        #leaderBoard{
+            position: relative;
+            display: block;
+            background-color: yellow;
+            color: black;
+            margin: auto;
+            height: 100px;
+            width: 70%;
+            border: none;
+            font-size: 50px;
+            text-justify: center;
+            cursor: pointer;
+            top: 370px;
+        }
     </style>
     <body>
         <h1 id='title'>成績表</h1>
@@ -35,6 +49,7 @@
             <button class='control-button' id='continue' onclick="start('question');">再試一次</button>
             <button class='control-button' id='quit' onclick="quit();">退出遊戲</button>
         </div>
+        <button id="leaderBoard" onclick="start('leaderboard')">排行榜</button>
         <script src="{{url_for('static', filename = 'js/controller.js')}}"></script>
         <script>
             let avgScore = parseFloat(localStorage.getItem('score')); 

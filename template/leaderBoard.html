@@ -3,6 +3,7 @@
     <head>
         <title>leader board</title>
         <meta charset="UFT-8">
+        <link rel="stylesheet" href="{{url_for('static', filename = 'css/controlButton.css')}}">
     </head>
     <style>
         body{
@@ -57,7 +58,7 @@
         }
     </style>
     <body>
-        <h1>Leader Board</h1>
+        <h1>排行榜</h1>
         <table>
             <tr>
                 <th class="l">Rank</th>
@@ -90,6 +91,8 @@
                 <td class="r" id="5-score"></td>
             </tr>
         </table>
+        <button id="quit" class="control-button" onclick="quit();">退出遊戲</button>
+        <script src="{{url_for('static', filename ='css/controlButton.css')}}"
         <script>
             const stName = document.getElementById("st-name");
             const stScore = document.getElementById("st-score");

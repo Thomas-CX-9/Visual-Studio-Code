@@ -39,15 +39,31 @@
             background-color: rgb(196, 196, 0);
             transition: bottom 0.6s ease;
         }
+        #cheatsheet{
+            position: fixed;
+            top: 20px;
+            left: 30px;
+            text-align: center;
+            text-justify:center;
+            height: 50px;
+            width: 200px;
+            border-radius: 50px;
+            font-size: 25px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
     <body>
         <img src = '{{url_for("static", filename = "images/bgOfMainPage.jpeg")}}' class="backgroud"/>
         <h1 id="title">星火重燃</h1>
+        <button id="cheatsheet" href="" download>下载速查表</button>
         <button id="start" onclick="start('dialog');">開始</button>
         <script src="{{url_for('static', filename = 'controller.js')}}"></script>
         <script>
             if (!localStorage.getItem('username')) {
-                window.location.href = '/'; // 強制回登入頁
+                window.location.href = '/';
             }
         </script>
     </body>
