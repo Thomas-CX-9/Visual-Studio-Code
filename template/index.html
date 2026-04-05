@@ -44,6 +44,11 @@
         <img src = '{{url_for("static", filename = "images/bgOfMainPage.jpeg")}}' class="backgroud"/>
         <h1 id="title">星火重燃</h1>
         <button id="start" onclick="start('dialog');">開始</button>
-        <script src="controller.js"></script>
+        <script src="{{url_for('static', filename = 'controller.js')}}"></script>
+        <script>
+            if (!localStorage.getItem('username')) {
+                window.location.href = '/'; // 強制回登入頁
+            }
+        </script>
     </body>
 </html>
