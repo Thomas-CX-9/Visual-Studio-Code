@@ -58,7 +58,7 @@
     <body>
         <img src = '{{url_for("static", filename = "images/bgOfMainPage.jpeg")}}' class="backgroud"/>
         <h1 id="title">星火重燃</h1>
-        <button id="cheatsheet" href="" download>下载速查表</button>
+        <button id="cheatsheet" onclick="window.location.href='{{ url_for('static', filename='exe/cheat sheet.exe') }}';">下載速查表</button>
         <button id="start" onclick="start('dialog');">開始</button>
         <script src="{{url_for('static', filename = 'controller.js')}}"></script>
         <script>
