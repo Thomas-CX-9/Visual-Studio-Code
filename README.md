@@ -1,1 +1,1 @@
-# The Fucking CS Project
+CS Project
